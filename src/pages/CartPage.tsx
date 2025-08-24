@@ -6,6 +6,9 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { BottomNavigation } from "@/components/BottomNavigation";
 
+
+
+
 interface CartItem {
   id: number;
   name: string;
