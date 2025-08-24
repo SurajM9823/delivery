@@ -59,7 +59,7 @@ export function BottomNavigation() {
           );
         })}
       </div>
-      <style jsx>{`
+      <style>{`
         .animate-scale-in {
           animation: scale-in 0.3s ease-in-out;
         }
