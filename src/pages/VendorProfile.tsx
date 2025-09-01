@@ -33,6 +33,7 @@ const vendor = {
 export default function VendorProfile() {
   const navigate = useNavigate();
   const { vendorName } = useParams();
+  const decodedVendorName = decodeURIComponent(vendorName || '');
   const [isFollowing, setIsFollowing] = useState(false);
 
   return (
@@ -48,7 +49,7 @@ export default function VendorProfile() {
           >
             <ArrowLeft className="h-5 w-5" />
           </Button>
-          <h1 className="font-semibold truncate">{vendor.name}</h1>
+          <h1 className="font-semibold truncate">{decodedVendorName}</h1>
           <Button
             variant="ghost"
             size="sm"

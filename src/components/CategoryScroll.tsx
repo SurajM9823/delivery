@@ -2,8 +2,8 @@ import { motion, Reorder } from 'framer-motion';
 import { useState } from 'react';
 
 const initialCategories = [
-  { id: 1, name: "Groceries", icon: "🛒", color: "bg-green-100 text-green-700 border-green-300 hover:bg-green-200" },
-  { id: 2, name: "Electronics", icon: "📱", color: "bg-blue-100 text-blue-700 border-blue-300 hover:bg-blue-200" },
+  { id: 1, name: "Groceries", icon: "🛒", color: "bg-primary/10 text-primary border-primary/30 hover:bg-primary/20" },
+  { id: 2, name: "Electronics", icon: "📱", color: "bg-primary/10 text-primary border-primary/30 hover:bg-primary/20" },
   { id: 3, name: "Food", icon: "🍕", color: "bg-orange-100 text-orange-700 border-orange-300 hover:bg-orange-200" },
   { id: 4, name: "Fashion", icon: "👕", color: "bg-purple-100 text-purple-700 border-purple-300 hover:bg-purple-200" },
   { id: 5, name: "Home", icon: "🏠", color: "bg-teal-100 text-teal-700 border-teal-300 hover:bg-teal-200" },
@@ -16,7 +16,7 @@ export function CategoryScroll() {
   const [categories, setCategories] = useState(initialCategories);
 
   return (
-    <div className="px-4 py-3 bg-gradient-to-r from-gray-50 to-gray-100">
+    <div className="px-2 py-2 bg-gradient-to-r from-gray-50 to-gray-100">
       <Reorder.Group
         axis="x"
         values={categories}
@@ -31,7 +31,7 @@ export function CategoryScroll() {
             className="flex-none w-20"
           >
             <motion.button
-              className={`w-full p-3 rounded-xl font-medium text-center transition-all duration-300 border ${category.color} shadow-sm hover:shadow-md active:scale-95 focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-${category.color.split('-')[1]}-400 outline-none`}
+              className={`w-full p-2 rounded-xl font-medium text-center transition-all duration-300 border ${category.color} shadow-sm hover:shadow-md active:scale-95 focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-${category.color.split('-')[1]}-400 outline-none`}
               whileHover={{ scale: 1.05, y: -2 }}
               whileTap={{ scale: 0.95 }}
               drag="x"

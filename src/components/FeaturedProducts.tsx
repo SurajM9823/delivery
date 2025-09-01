@@ -2,6 +2,9 @@ import { Heart, ShoppingCart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useApp } from "@/contexts/AppContext";
+import { useToast } from "@/hooks/use-toast";
 
 const featuredProducts = [
   {
@@ -73,25 +76,68 @@ const featuredProducts = [
 ];
 
 export function FeaturedProducts() {
-  const [wishlist, setWishlist] = useState<number[]>([]);
+  const navigate = useNavigate();
+  const { addToCart, addToWishlist, removeFromWishlist, state } = useApp();
+  const { toast } = useToast();
 
-  const toggleWishlist = (id: number) => {
-    setWishlist((prev) =>
-      prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
-    );
+  const handleProductClick = (productId: number) => {
+    navigate(`/product/${productId}`);
+  };
+
+  const handleBuyNow = (product: any) => {
+    // Add to cart and navigate to cart
+    addToCart({
+      id: product.id,
+      name: product.name,
+      vendor: product.vendor,
+      price: product.price,
+      image: product.image,
+      inStock: product.inStock,
+      rating: product.rating
+    });
+    toast({
+      title: "Added to Cart",
+      description: `${product.name} added to your cart`,
+    });
+    navigate("/cart");
+  };
+
+  const handleAddToWishlist = (product: any) => {
+    const isInWishlist = state.wishlist.some(item => item.id === product.id);
+    if (isInWishlist) {
+      removeFromWishlist(product.id);
+      toast({
+        title: "Removed from Wishlist",
+        description: `${product.name} removed from wishlist`,
+      });
+    } else {
+      addToWishlist({
+        id: product.id,
+        name: product.name,
+        vendor: product.vendor,
+        price: product.price,
+        image: product.image,
+        inStock: product.inStock,
+        rating: product.rating
+      });
+      toast({
+        title: "Added to Wishlist",
+        description: `${product.name} added to wishlist`,
+      });
+    }
   };
 
   return (
-    <section className="px-4 py-12 mb-16 bg-gradient-to-br from-gray-50 to-gray-100">
+    <section className="px-4 py-3 mb-3 bg-gradient-to-br from-gray-50 to-gray-100">
       {/* Header */}
-      <div className="flex items-center justify-between mb-8">
-        <h2 className="text-2xl md:text-3xl font-semibold tracking-tight bg-gradient-to-r from-blue-600 to-teal-500 bg-clip-text text-transparent">
-          🌟 Featured Products
+      <div className="flex items-center justify-between mb-4">
+        <h2 className="text-xl md:text-2xl font-semibold tracking-tight text-black">
+         Featured Products
         </h2>
         <Button
           variant="outline"
           size="sm"
-          className="rounded-full border-teal-500 text-teal-500 hover:bg-teal-50 text-sm"
+          className="rounded-full border-teal-100 text-teal-200 hover:bg-teal-50 text-sm"
         >
           View All
         </Button>
@@ -106,7 +152,8 @@ export function FeaturedProducts() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: index * 0.1, duration: 0.3 }}
             whileHover={{ scale: 1.02, rotate: 0.5 }}
-            className="relative rounded-lg bg-white border border-gray-200 hover:border-teal-200 shadow-sm hover:shadow-md hover:bg-gray-50 transition-all duration-300 overflow-hidden group"
+            className="relative rounded-lg bg-white border border-gray-200 hover:border-teal-200 shadow-sm hover:shadow-md hover:bg-gray-50 transition-all duration-300 overflow-hidden group cursor-pointer"
+            onClick={() => handleProductClick(product.id)}
           >
             {/* Discount Badge */}
             {product.discount && (
@@ -122,12 +169,12 @@ export function FeaturedProducts() {
 
             {/* Wishlist */}
             <button
-              onClick={() => toggleWishlist(product.id)}
+              onClick={() => handleAddToWishlist(product)}
               className="absolute top-2 right-2 bg-white/90 p-1 rounded-full shadow-sm hover:scale-105 transition-transform"
             >
               <Heart
                 className={`h-4 w-4 ${
-                  wishlist.includes(product.id)
+                  state.wishlist.some(item => item.id === product.id)
                     ? "text-red-500 fill-red-500"
                     : "text-gray-500"
                 }`}
@@ -183,6 +230,10 @@ export function FeaturedProducts() {
                   <Button
                     variant="outline"
                     className="w-32 border-teal-500 text-teal-600 hover:bg-teal-50 hover:text-teal-700 rounded-full text-sm py-2 shadow-sm"
+                    onClick={(e) => {
+                      e.stopPropagation(); // Prevent card click
+                      handleBuyNow(product);
+                    }}
                   >
                     <ShoppingCart className="h-4 w-4 mr-1.5" /> Buy
                   </Button>

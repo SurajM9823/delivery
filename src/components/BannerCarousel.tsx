@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useRef } from "react";
 import bannerGrocery from "@/assets/banner-grocery.jpg";
 import bannerElectronics from "@/assets/banner-electronics.jpg";
 import bannerFood from "@/assets/banner-food.jpg";
@@ -26,20 +26,63 @@ const banners = [
 
 export function BannerCarousel() {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [isDragging, setIsDragging] = useState(false);
+  const [startX, setStartX] = useState(0);
+  const [currentX, setCurrentX] = useState(0);
+  const carouselRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % banners.length);
-    }, 5000);
-    return () => clearInterval(timer);
-  }, []);
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setIsDragging(true);
+    setStartX(e.touches[0].clientX);
+    setCurrentX(e.touches[0].clientX);
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (!isDragging) return;
+    setCurrentX(e.touches[0].clientX);
+  };
+
+  const handleTouchEnd = () => {
+    if (!isDragging) return;
+
+    const diff = startX - currentX;
+    const threshold = 50; // Minimum swipe distance
+
+    if (Math.abs(diff) > threshold) {
+      if (diff > 0) {
+        // Swipe left - next slide
+        setCurrentSlide((prev) => (prev + 1) % banners.length);
+      } else {
+        // Swipe right - previous slide
+        setCurrentSlide((prev) => (prev - 1 + banners.length) % banners.length);
+      }
+    }
+
+    setIsDragging(false);
+    setCurrentX(0);
+  };
+
+  const getTransformValue = () => {
+    if (isDragging) {
+      const diff = currentX - startX;
+      const maxOffset = 100; // Maximum drag offset in percentage
+      const offset = (diff / (carouselRef.current?.offsetWidth || 1)) * 100;
+      const clampedOffset = Math.max(-maxOffset, Math.min(maxOffset, offset));
+      return `translateX(calc(-${currentSlide * 100}% + ${clampedOffset}px))`;
+    }
+    return `translateX(-${currentSlide * 100}%)`;
+  };
 
   return (
     <div className="px-4 mb-6">
       <div className="relative overflow-hidden rounded-2xl shadow-brand">
         <div
-          className="flex transition-transform duration-500 ease-out"
-          style={{ transform: `translateX(-${currentSlide * 100}%)` }}
+          ref={carouselRef}
+          className="flex transition-transform duration-700 ease-in-out"
+          style={{ transform: getTransformValue() }}
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
         >
           {banners.map((banner) => (
             <div key={banner.id} className="w-full flex-shrink-0 relative">
@@ -55,19 +98,6 @@ export function BannerCarousel() {
                 </div>
               </div>
             </div>
-          ))}
-        </div>
-        
-        {/* Dots indicator */}
-        <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2">
-          {banners.map((_, index) => (
-            <button
-              key={index}
-              onClick={() => setCurrentSlide(index)}
-              className={`w-2 h-2 rounded-full transition-smooth ${
-                index === currentSlide ? "bg-white" : "bg-white/50"
-              }`}
-            />
           ))}
         </div>
       </div>

@@ -1,31 +1,76 @@
-import { useEffect } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+
+const splashSlides = [
+  {
+    id: 1,
+    image: '/images/spone.jpg'
+  },
+  {
+    id: 2,
+    image: '/images/sptwo.jpg'
+  },
+  {
+    id: 3,
+    image: '/images/spthree.jpg'
+  }
+];
 
 export default function SplashScreen() {
   const navigate = useNavigate();
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const [swiper, setSwiper] = useState(null);
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
+  const handleSkip = () => {
+    navigate("/login");
+  };
+
+  const handleComplete = () => {
+    if (currentSlide < 2) {
+      swiper?.slideNext();
+    } else {
       navigate("/login");
-    }, 3000);
-
-    return () => clearTimeout(timer);
-  }, [navigate]);
+    }
+  };
 
   return (
-    <div className="min-h-screen bg-background flex flex-col items-center justify-center px-6">
-      <div className="bg-gradient-primary w-full max-w-md rounded-2xl p-8 text-center shadow-xl animate-in fade-in zoom-in-95 duration-1000">
-        <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center mx-auto mb-6 shadow-md">
-          <span className="text-4xl">🛒</span>
-        </div>
-        <h1 className="text-3xl font-bold text-white mb-2">KathSnap</h1>
-        <p className="text-white/80 text-sm mb-6">Express Delivery in Kathmandu Valley</p>
-      </div>
-      
-      <div className="absolute bottom-10 flex flex-col items-center">
-        <div className="w-6 h-6 border-2  rounded-full animate-spin mb-3"></div>
-        <p className="text-muted-foreground text-xs">Loading your experience...</p>
-      </div>
+    <div className="h-screen w-screen overflow-hidden">
+      <Swiper
+        spaceBetween={0}
+        slidesPerView={1}
+        speed={600}
+        grabCursor={true}
+        touchRatio={1.5}
+        onSwiper={setSwiper}
+        onSlideChange={(swiper) => setCurrentSlide(swiper.activeIndex)}
+        className="h-full w-full"
+      >
+        {splashSlides.map((slide) => (
+          <SwiperSlide key={slide.id}>
+            <div
+              className="h-screen w-screen bg-cover bg-center bg-no-repeat relative p-6"
+              style={{ backgroundImage: `url(${slide.image})` }}
+            >
+              {/* Skip Button - Top Right */}
+              <button
+                onClick={handleSkip}
+                className="absolute top-4 right-4 bg-transparent text-black text-sm font-medium px-3 py-1 rounded-full border border-black hover:bg-opacity-80"
+              >
+                Skip
+              </button>
+              {/* Next/Get Started Button - Bottom Center */}
+              <button
+                onClick={handleComplete}
+                className="absolute bottom-6 left-1/2 transform -translate-x-1/2 bg-[rgb(133,96,67)] text-white px-8 py-3 rounded-full font-semibold shadow-lg hover:bg-opacity-80"
+              >
+                {currentSlide < 2 ? "Next" : "Get Started"}
+              </button>
+            </div>
+          </SwiperSlide>
+        ))}
+      </Swiper>
     </div>
   );
 }

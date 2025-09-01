@@ -1,6 +1,7 @@
 import { Star, MapPin, Flame } from "lucide-react";
 import { motion } from "framer-motion";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"; // Assuming ShadCN UI or similar for tooltips
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import { useNavigate } from "react-router-dom";
 
 const trendingItems = [
   {
@@ -79,6 +80,12 @@ function renderStars(rating: number) {
 }
 
 export function TrendingItems() {
+  const navigate = useNavigate();
+
+  const handleItemClick = (itemId: number) => {
+    navigate(`/product/${itemId}`);
+  };
+
   return (
     <section className="px-4 sm:px-6 md:px-8 mb-6 lg:mb-8">
       <h2 className="text-lg sm:text-xl font-bold mb-4 text-foreground tracking-tight">Trending Now 🔥</h2>
@@ -92,7 +99,7 @@ export function TrendingItems() {
             whileHover={{ scale: 1.03, boxShadow: "0 12px 24px rgba(0,0,0,0.15)" }}
             whileTap={{ scale: 0.97 }}
             className="relative min-w-[140px] sm:min-w-[160px] bg-gradient-to-br from-card/90 to-card rounded-2xl p-4 shadow-lg border border-border/20 hover:shadow-xl hover:border-primary/40 transition-all duration-300 cursor-pointer group snap-start md:min-w-0"
-            onClick={() => window.location.href = `/product/${item.id}`}
+            onClick={() => handleItemClick(item.id)}
             aria-label={`View ${item.name} from ${item.vendor}`}
           >
             <Tooltip>
