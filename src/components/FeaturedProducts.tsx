@@ -128,7 +128,7 @@ export function FeaturedProducts() {
   };
 
   return (
-    <section className="px-4 py-3 mb-3 bg-gradient-to-br from-gray-50 to-gray-100">
+    <section className="px-4 py-3 mb-8 bg-gradient-to-br from-gray-50 to-gray-100">
       {/* Header */}
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-xl md:text-2xl font-semibold tracking-tight text-black">
@@ -137,7 +137,12 @@ export function FeaturedProducts() {
         <Button
           variant="outline"
           size="sm"
-          className="rounded-full border-teal-100 text-teal-200 hover:bg-teal-50 text-sm"
+          style={{
+            borderColor: "#856043",
+            color: "#856043",
+            backgroundColor: "transparent",
+          }}
+          className="rounded-full hover:bg-[#856043] hover:text-white text-sm"
         >
           View All
         </Button>
@@ -152,7 +157,7 @@ export function FeaturedProducts() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: index * 0.1, duration: 0.3 }}
             whileHover={{ scale: 1.02, rotate: 0.5 }}
-            className="relative rounded-lg bg-white border border-gray-200 hover:border-teal-200 shadow-sm hover:shadow-md hover:bg-gray-50 transition-all duration-300 overflow-hidden group cursor-pointer"
+            className="relative rounded-lg bg-white border border-gray-200 hover:border-[#856043] shadow-sm hover:shadow-md hover:bg-gray-50 transition-all duration-300 overflow-hidden group cursor-pointer"
             onClick={() => handleProductClick(product.id)}
           >
             {/* Discount Badge */}
@@ -195,7 +200,7 @@ export function FeaturedProducts() {
 
               {/* Price */}
               <div className="flex items-center gap-2 mb-2">
-                <span className="font-medium text-base text-teal-600">
+                <span className="font-medium text-base text-[#856043]">
                   {product.price}
                 </span>
                 {product.originalPrice && (
@@ -229,7 +234,20 @@ export function FeaturedProducts() {
                 {product.inStock ? (
                   <Button
                     variant="outline"
-                    className="w-32 border-teal-500 text-teal-600 hover:bg-teal-50 hover:text-teal-700 rounded-full text-sm py-2 shadow-sm"
+                    className="w-32 text-sm py-2 shadow-sm"
+                    style={{
+                      borderColor: "#856043",
+                      color: "#856043",
+                      backgroundColor: "transparent",
+                    }}
+                    onMouseOver={(e) => {
+                      e.currentTarget.style.backgroundColor = "#856043";
+                      e.currentTarget.style.color = "#ffffff";
+                    }}
+                    onMouseOut={(e) => {
+                      e.currentTarget.style.backgroundColor = "transparent";
+                      e.currentTarget.style.color = "#856043";
+                    }}
                     onClick={(e) => {
                       e.stopPropagation(); // Prevent card click
                       handleBuyNow(product);

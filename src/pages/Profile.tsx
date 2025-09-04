@@ -24,6 +24,9 @@ const MENU_ITEMS = [
   { icon: HelpCircle, label: "Help & Support", path: "/help" },
 ];
 
+// Vendor Dashboard menu item
+const VENDOR_DASHBOARD_ITEM = { icon: User, label: "Vendor Dashboard", path: "/vendor/dashboard" };
+
 // Featured vendors for profile page
 const FEATURED_VENDORS = [
   {
@@ -73,7 +76,10 @@ const ProfilePage = () => {
   return (
     <div className="min-h-screen bg-gray-100 font-sans">
       {/* Header Section */}
-      <div className="relative bg-gradient-to-br from-indigo-700 via-purple-600 to-blue-500 p-6 pb-16 rounded-b-[2rem] shadow-2xl">
+      <div
+        className="relative p-6 pb-16 rounded-b-[2rem] shadow-2xl"
+        style={{ backgroundColor: "#d4c2a7" }} // Professional lighter shade of #856043
+      >
         <div className="flex items-center justify-between max-w-7xl mx-auto">
           <div className="flex items-center space-x-4">
             <div className="relative group">
@@ -85,9 +91,9 @@ const ProfilePage = () => {
               <div className="absolute inset-0 rounded-full bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover:opacity-50 transition-opacity duration-300" />
             </div>
             <div className="space-y-0.5">
-              <h2 className="text-2xl font-bold text-white tracking-tight">{user.name}</h2>
-              <p className="text-primary/80 text-sm font-medium">{user.email}</p>
-              <p className="text-primary/60 text-xs font-light">{user.phone}</p>
+              <h2 className="text-2xl font-bold text-black tracking-tight">{user.name}</h2>
+              <p className="text-black text-sm font-medium">{user.email}</p>
+              <p className="text-black text-xs font-light">{user.phone}</p>
             </div>
           </div>
           <Button
@@ -121,6 +127,23 @@ const ProfilePage = () => {
               </button>
             );
           })}
+
+          {/* Vendor Dashboard Section */}
+          <div className="mt-4 pt-4 border-t border-gray-200">
+            <h3 className="text-sm font-semibold text-gray-600 mb-2 px-4">Business</h3>
+            <button
+              className="flex items-center justify-between w-full p-4 bg-white rounded-lg shadow-sm hover:shadow-md hover:bg-primary/5 transition-all duration-200 ease-in-out transform hover:-translate-y-0.5 group"
+              onClick={() => navigate(VENDOR_DASHBOARD_ITEM.path)}
+            >
+              <div className="flex items-center space-x-3">
+                <div className="p-1.5 bg-primary/10 rounded-md group-hover:bg-primary/20 transition-colors duration-200">
+                  <VENDOR_DASHBOARD_ITEM.icon className="h-5 w-5 text-primary" />
+                </div>
+                <span className="font-medium text-gray-800 text-base">{VENDOR_DASHBOARD_ITEM.label}</span>
+              </div>
+              <div className="i-lucide-chevron-right h-4 w-4 text-gray-400 transform transition-transform duration-200 group-hover:translate-x-1" />
+            </button>
+          </div>
         </div>
 
         {/* Featured Vendors Section */}
@@ -169,14 +192,16 @@ const ProfilePage = () => {
         </div>
 
         {/* Logout Button */}
-        <Button
-          variant="outline"
-          className="w-full mt-6 mx-4 flex items-center justify-center py-6 bg-red-50/40 border-red-200 text-red-600 hover:bg-red-100 hover:text-red-700 rounded-lg shadow-sm transition-all duration-200 hover:shadow-md transform hover:-translate-y-0.5"
-          onClick={handleLogout}
-        >
-          <LogOut className="h-5 w-5 mr-2" />
-          <span className="font-medium text-base">Logout</span>
-        </Button>
+        <div className="flex justify-center mt-6">
+          <Button
+            variant="outline"
+            className="w-full max-w-md flex items-center justify-center py-6 bg-red-50/40 border-red-200 text-red-600 hover:bg-red-100 hover:text-red-700 rounded-lg shadow-sm transition-all duration-200 hover:shadow-md transform hover:-translate-y-0.5"
+            onClick={handleLogout}
+          >
+            <LogOut className="h-5 w-5 mr-2" />
+            <span className="font-medium text-base">Logout</span>
+          </Button>
+        </div>
       </div>
 
       {/* Bottom Navigation */}

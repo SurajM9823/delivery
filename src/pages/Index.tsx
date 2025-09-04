@@ -8,7 +8,7 @@ import { BottomNavigation } from "@/components/BottomNavigation";
 
 const Index = () => {
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background pb-24">
       <Header />
       <SearchBar />
       <CategoryScroll />

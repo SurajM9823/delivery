@@ -74,7 +74,7 @@ export function BannerCarousel() {
   };
 
   return (
-    <div className="px-4 mb-6">
+    <div className="mb-6">
       <div className="relative overflow-hidden rounded-2xl shadow-brand">
         <div
           ref={carouselRef}
@@ -92,7 +92,7 @@ export function BannerCarousel() {
                 className="w-full h-48 object-cover"
               />
               <div className="absolute inset-0 bg-gradient-to-r from-black/40 to-transparent flex items-center">
-                <div className="p-6 text-white">
+                <div className="py-6 pl-4 pr-2 text-white">
                   <h3 className="text-xl font-bold mb-1">{banner.title}</h3>
                   <p className="text-sm opacity-90">{banner.subtitle}</p>
                 </div>
